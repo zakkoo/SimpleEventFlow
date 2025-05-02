@@ -18,4 +18,9 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleEventFlow.Core\SimpleEventFlow.Core.csproj" />
+    <ProjectReference Include="..\SimpleEventFlow.InMemory\SimpleEventFlow.InMemory.csproj" />
+  </ItemGroup>
+
 </Project>
