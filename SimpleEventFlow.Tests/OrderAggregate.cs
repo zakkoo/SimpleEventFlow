@@ -1,90 +1,71 @@
-using System.Text.Json;
 using SimpleEventFlow.Core;
 
 namespace SimpleEventFlow.Tests;
 
-public class OrderAggregate : IAggregateRoot
+public class OrderAggregate : AggregateRoot
 {
-    private readonly List<Event> _UncommittedEvents = [];
-    public Guid? AggregateId { get; private set; }
-    public int AggregateVersion { get; private set; }
     public bool IsOrderCanceled { get; private set; }
     public Guid? CustomerId { get; private set; }
     public string? CustomerEmail { get; private set; }
     public string? ShoppingItem { get; private set; }
 
-    public OrderAggregate(Guid aggregateId)
+    public OrderAggregate() : base()
     {
-        AggregateId = aggregateId;
-    }
-    public OrderAggregate() { }
-
-    public void ApplyEvent(Event evt)
-    {
-        switch (evt.EventType)
-        {
-            case "OrderCreated":
-                var data = JsonSerializer.Deserialize<OrderCreatedEventData>(evt.Data) ?? throw new NullReferenceException($"No data found for {evt.EventType}");
-                CustomerId = data.CustomerId;
-                CustomerEmail = data.CustomerEmail;
-                ShoppingItem = data.ShoppingItem;
-                break;
-            case "OrderCanceled":
-                IsOrderCanceled = true;
-                break;
-        }
-        AggregateVersion++;
+        RegisterHandler<OrderCreatedEvent>(Apply);
+        RegisterHandler<OrderCanceledEvent>(Apply);
     }
 
-    public Event CreateOrder(OrderCreatedEventData data)
+    public OrderAggregate(Guid aggregateId) : this()
     {
-        var evt = new Event
-        {
-            EventId = Guid.NewGuid(),
-            EventType = "OrderCreated",
-            EventTypeVersion = 1,
-            EventOccuredUtc = DateTime.UtcNow,
-            AggregateId = AggregateId ?? throw new NullReferenceException(nameof(AggregateId)),
-            AggregateVersion = AggregateVersion,
-            Data = JsonSerializer.Serialize(data)
-        };
-        ApplyEvent(evt);
-        _UncommittedEvents.Add(evt);
-        return evt;
+        SetAggregateId(aggregateId);
     }
 
-    public Event CancelOrder()
+    private void Apply(OrderCreatedEvent evt)
     {
-        var evt = new Event
-        {
-            EventId = Guid.NewGuid(),
-            EventType = "OrderCanceled",
-            EventTypeVersion = 1,
-            EventOccuredUtc = DateTime.UtcNow,
-            AggregateId = AggregateId ?? throw new NullReferenceException(nameof(AggregateId)),
-            AggregateVersion = AggregateVersion,
-            Data = string.Empty
-        };
-        ApplyEvent(evt);
-        _UncommittedEvents.Add(evt);
-        return evt;
+        CustomerId = evt.CustomerId;
+        CustomerEmail = evt.CustomerEmail;
+        ShoppingItem = evt.ShoppingItem;
     }
 
-    public void ClearUncommittedEvents()
+    private void Apply(OrderCanceledEvent evt)
     {
-        _UncommittedEvents.Clear();
+        IsOrderCanceled = true;
     }
 
-    public List<Event> GetUncommittedEvents()
+    public void CreateOrder(Guid customerId, string customerEmail, string shoppingItem)
     {
-        return _UncommittedEvents;
+        if (AggregateId == null)
+            throw new InvalidOperationException("AggregateId must be set.");
+
+        var evt = new OrderCreatedEvent
+        (
+            Guid.NewGuid(),
+            "OrderCreated",
+            1,
+            DateTime.UtcNow,
+            AggregateId.Value,
+            AggregateVersion + 1,
+            customerId,
+            customerEmail,
+            shoppingItem
+        );
+        RaiseEvent(evt);
     }
 
-    public bool SetAggregateId(Guid aggregateId)
+    public void CancelOrder()
     {
-        if (AggregateId != null) return false;
+        if (AggregateId == null)
+            throw new InvalidOperationException("AggregateId must be set.");
 
-        AggregateId = aggregateId;
-        return true;
+        var evt = new OrderCanceledEvent
+        (
+            Guid.NewGuid(),
+            "OrderCanceled",
+            1,
+            DateTime.UtcNow,
+            AggregateId.Value,
+            AggregateVersion + 1
+        );
+        RaiseEvent(evt);
     }
 }
