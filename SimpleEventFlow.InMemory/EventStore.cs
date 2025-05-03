@@ -1,4 +1,5 @@
 using SimpleEventFlow.Core;
+using SimpleEventFlow.InMemory;
 
 namespace SimpleEventFlow.InMemory;
 
