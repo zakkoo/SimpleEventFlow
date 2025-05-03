@@ -24,6 +24,7 @@ public class AggregateRepository : IAggregateRepository
 
     public async Task SaveAggregateAsync<T>(T aggregate) where T : IAggregateRoot
     {
+        if(aggregate.AggregateId == null) throw new NullReferenceException($"Not allowed to be null: {nameof(aggregate.AggregateId)}");
         var events = aggregate.GetUncommittedEvents();
         if(events.Count == 0) return;
         await _eventStore.SaveEventsAsync(aggregate.AggregateId ?? throw new NullReferenceException(nameof(aggregate.AggregateId)), events);
