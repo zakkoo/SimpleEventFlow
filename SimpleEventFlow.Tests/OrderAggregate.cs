@@ -38,17 +38,17 @@ public class OrderAggregate : AggregateRoot
             throw new InvalidOperationException("AggregateId must be set.");
 
         var evt = new OrderCreatedEvent
-        (
-            Guid.NewGuid(),
-            "OrderCreated",
-            1,
-            DateTime.UtcNow,
-            AggregateId.Value,
-            AggregateVersion + 1,
-            customerId,
-            customerEmail,
-            shoppingItem
-        );
+        {
+            EventId = Guid.NewGuid(),
+            EventType= "OrderCreated",
+            EventTypeVersion=1,
+            EventOccuredUtc = DateTime.UtcNow,
+            AggregateId = AggregateId.Value,
+            AggregateVersion = AggregateVersion + 1,
+            CustomerId = customerId,
+            CustomerEmail = customerEmail,
+            ShoppingItem=shoppingItem
+        };
         RaiseEvent(evt);
     }
 
@@ -58,14 +58,14 @@ public class OrderAggregate : AggregateRoot
             throw new InvalidOperationException("AggregateId must be set.");
 
         var evt = new OrderCanceledEvent
-        (
-            Guid.NewGuid(),
-            "OrderCanceled",
-            1,
-            DateTime.UtcNow,
-            AggregateId.Value,
-            AggregateVersion + 1
-        );
+        {
+            EventId = Guid.NewGuid(),
+            EventType= "OrderCreated",
+            EventTypeVersion=1,
+            EventOccuredUtc = DateTime.UtcNow,
+            AggregateId = AggregateId.Value,
+            AggregateVersion = AggregateVersion + 1,
+        };
         RaiseEvent(evt);
     }
 }
