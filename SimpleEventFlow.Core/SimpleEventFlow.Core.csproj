@@ -4,6 +4,12 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Version>0.1.0</Version>
+    <Authors>zakkoo</Authors>
+    <Description>A simple implementation of the event sourcing pattern in C#.</Description>
+    <PackageTags>event-sourcing;simple;dotnet</PackageTags>
+    <RepositoryUrl>https://github.com/zakkoo/SimpleEventFlow</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
 </Project>
