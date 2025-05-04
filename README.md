@@ -51,7 +51,7 @@ public class WithdrawalMadeEvent : Event
 ```csharp
 public class BankAccount : AggregateRoot
 {
-    private decimal _balance;
+    public decimal Balance { get; private set; }
 
     public BankAccount()
     {
@@ -62,21 +62,23 @@ public class BankAccount : AggregateRoot
 
     private void Handle(AccountCreatedEvent evt)
     {
-        _balance = evt.InitialBalance;
+        Balance = evt.InitialBalance;
     }
 
     private void Handle(DepositMadeEvent evt)
     {
-        _balance += evt.Amount;
+        Balance += evt.Amount;
     }
 
     private void Handle(WithdrawalMadeEvent evt)
     {
-        _balance -= evt.Amount;
+        Balance -= evt.Amount;
     }
 
     public void CreateAccount(Guid accountId, decimal initialBalance)
     {
+        AggregateId = accountId;
+        
         var evt = new AccountCreatedEvent
         {
             EventId = Guid.NewGuid(),
@@ -107,7 +109,7 @@ public class BankAccount : AggregateRoot
 
     public void Withdraw(decimal amount)
     {
-        if (_balance < amount)
+        if (Balance < amount)
             throw new InvalidOperationException("Insufficient funds");
 
         var evt = new WithdrawalMadeEvent

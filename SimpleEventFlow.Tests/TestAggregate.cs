@@ -1,5 +1,6 @@
 using SimpleEventFlow.Core;
-using SimpleEventFlow.Tests;
+
+namespace SimpleEventFlow.Tests;
 
 public class TestAggregate : AggregateRoot
 {

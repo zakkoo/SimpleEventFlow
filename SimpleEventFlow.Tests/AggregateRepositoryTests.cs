@@ -1,6 +1,7 @@
 using SimpleEventFlow.Core;
 using SimpleEventFlow.InMemory;
-using SimpleEventFlow.Tests;
+
+namespace SimpleEventFlow.Tests;
 
 public class AggregateRepositoryTests
 {
