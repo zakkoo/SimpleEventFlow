@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SimpleEventFlow.Core\SimpleEventFlow.Core.csproj" />
+    <None Include="..\README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -14,6 +15,7 @@
     <PackageTags>event-sourcing;simple;dotnet</PackageTags>
     <RepositoryUrl>https://github.com/zakkoo/SimpleEventFlow</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
 </Project>
