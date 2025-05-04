@@ -10,6 +10,7 @@
     <PackageTags>event-sourcing;simple;dotnet</PackageTags>
     <RepositoryUrl>https://github.com/zakkoo/SimpleEventFlow</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
 </Project>
