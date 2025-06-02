@@ -151,11 +151,10 @@ loadedAccount.Withdraw(30m);
 await repository.SaveAggregateAsync(loadedAccount);
 ```
 
-## Installation
-
-...
-
 ## Notes
 
 - This implementation uses an in-memory event store for simplicity. In a production environment, you would want to use a persistent event store.
 - Concurrency control and other advanced features are not implemented in this example.
+
+## Buy me a coffee
+https://buymeacoffee.com/zakkoo
